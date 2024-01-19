@@ -31,17 +31,20 @@ exports.getbyId = function (req, res) {
       console.log(error);
       res.send('Invalid Server');
     } else {
-      response.success({
-        Status: 'Success',
-        Message: 'Data Ditemukan',
-        Data: {
-          task_id: task_id,
-          title: rows.title,
-          description: rows.description,
-          due_date: rows.due_date,
-          is_done: rows.is_done,
+      response.success(
+        {
+          Status: 'Success',
+          Message: 'Data Ditemukan',
+          Data: {
+            task_id: task_id,
+            title: rows.title,
+            description: rows.description,
+            due_date: rows.due_date,
+            is_done: rows.is_done,
+          },
         },
-      });
+        res
+      );
     }
   });
 };
@@ -77,7 +80,61 @@ exports.insertTask = function (req, res) {
   });
 };
 
-exports.updateTask = function (req, res) {};
+exports.updateTask = function (req, res) {
+  let task_id = req.body.task_id;
+  let category_uid = req.body.category_uid;
+  let title = req.body.title;
+  let description = req.body.description;
+  let due_date = req.body.due_date;
+  let is_done = 0;
+
+  dbexec.query('UPDATE task SET category_uid=?, title=?, description=?, due_date=?, is_done=? WHERE ??=? ', [category_uid, title, description, due_date, is_done, 'task_id', task_id], function (error, rows) {
+    if (error) {
+      console.log(error);
+      res.send('Invalid Server');
+    } else {
+      response.success(
+        {
+          Status: 'Success',
+          Message: 'Data Berhasil di Update',
+          Data: {
+            task_id: rows.task_id,
+            category_uid: rows.category_uid,
+            title: rows.title,
+            description: rows.description,
+            due_date: rows.due_date,
+            is_done: rows.is_done,
+          },
+        },
+        res
+      );
+    }
+  });
+};
+
+exports.doneTask = function (req, res) {
+  const task_id = req.body.task_id;
+  let is_done = 1;
+
+  dbexec.query('UPDATE task SET is_done=? WHERE ??=?', [is_done, 'task_id', task_id], function (error, rows) {
+    if (error) {
+      console.log(error);
+      res.send('Invalid Server');
+    } else {
+      response.success(
+        {
+          Status: 'Success',
+          Message: 'Task is Done',
+          Data: {
+            task_id: rows.task_id,
+            Status: 'Done',
+          },
+        },
+        res
+      );
+    }
+  });
+};
 
 exports.deleteTask = function (req, res) {
   const task_id = req.params.task_id;

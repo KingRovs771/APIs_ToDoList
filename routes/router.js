@@ -6,6 +6,8 @@ module.exports = function (app) {
   app.route('/').get(main.indexPage);
   app.route('/task/readtask').get(main.viewTask);
   app.route('/task/insert_task').post(main.insertTask);
+  app.route('/task/get_read_task/:task_id').get(main.getbyId);
+  app.route('/task/is_done').put(main.doneTask);
   app.route('/task/update_task').put(main.updateTask);
   app.route('/task/delete_task').delete(main.deleteTask);
 };
