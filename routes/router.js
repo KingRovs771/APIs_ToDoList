@@ -4,7 +4,7 @@ module.exports = function (app) {
   const main = require('../controller/taskController');
 
   app.route('/').get(main.indexPage);
-  app.route('/task/readtask').get(main.viewTask);
+  app.route('/task/read_task').get(main.viewTask);
   app.route('/task/insert_task').post(main.insertTask);
   app.route('/task/get_read_task/:task_id').get(main.getbyId);
   app.route('/task/is_done').put(main.doneTask);
